@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: ./packages/web
+    volumes:
+      - ./packages/web:/app
+    ports:
+      - "3000:3000"
+    command: npm run dev # Usa el comando de desarrollo
+
+  core:
+    build:
+      context: ./packages/core
+    volumes:
+      - ./packages/core:/app
+    ports:
+      - "4000:4000"
+    command: npm run dev # Usa el comando de desarrollo
