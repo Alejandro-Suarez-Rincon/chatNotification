@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
+import { FiSend } from "react-icons/fi";
 
 const socket = io(process.env.SOCKET_CLIENT ?? "http://localhost:4000");
 
@@ -28,7 +29,7 @@ export default function Chat() {
   };
 
   return (
-    <section>
+    <section className="flex flex-col justify-center items-center h-screen">
       <ul id="messages">
         {messages.map((msg, index) => (
           <li key={index}>{msg}</li>
@@ -36,12 +37,16 @@ export default function Chat() {
       </ul>
       <form onSubmit={sendMessage}>
         <input
+          className="border"
           id="input"
           autoComplete="off"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button>Send</button>
+
+        <button>
+          <FiSend className="" />
+        </button>
       </form>
     </section>
   );
