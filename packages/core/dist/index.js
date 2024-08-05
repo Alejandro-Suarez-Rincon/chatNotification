@@ -8,8 +8,13 @@ const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
-const io = new socket_io_1.Server(server);
-app.get("/api/hello", (req, res) => {
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    },
+});
+app.get("/", (req, res) => {
     res.send({ message: "Hello from the server!" });
 });
 io.on("connection", (socket) => {

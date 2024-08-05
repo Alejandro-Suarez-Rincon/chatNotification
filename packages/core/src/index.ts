@@ -4,9 +4,14 @@ import { Server } from "socket.io";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
-app.get("/api/hello", (req, res) => {
+app.get("/", (req, res) => {
   res.send({ message: "Hello from the server!" });
 });
 
