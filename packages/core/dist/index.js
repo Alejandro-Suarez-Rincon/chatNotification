@@ -19,11 +19,15 @@ app.get("/", (req, res) => {
 });
 io.on("connection", (socket) => {
     console.log("a user connected");
+    socket.on("join room", ({ room, username }) => {
+        socket.join(room);
+        console.log(`${username} joined room ${room}`);
+    });
+    socket.on("message:server", ({ room, sender, message }) => {
+        io.to(room).emit("message:client", { sender, message });
+    });
     socket.on("disconnect", () => {
         console.log("user disconnected");
-    });
-    socket.on("chat message", (msg) => {
-        io.emit("chat message", msg);
     });
 });
 const PORT = process.env.PORT || 4000;

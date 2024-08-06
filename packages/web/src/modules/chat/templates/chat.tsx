@@ -1,39 +1,38 @@
 "use client";
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
-import { FiSend } from "react-icons/fi";
+import { io } from "socket.io-client";
 
-const socket = io(process.env.SOCKET_CLIENT ?? "http://localhost:4000");
+const socket = io("http://localhost:4000");
 
 export default function Chat() {
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<
     { sender: string; message: string }[]
   >([]);
-  const [username, setUsername] = useState<string>(""); // Nombre de usuario actual
-  const [receiver, setReceiver] = useState<string>(""); // Usuario receptor
+  const [username, setUsername] = useState<string>("");
+  const [room, setRoom] = useState<string>("");
 
   useEffect(() => {
-    if (username) {
-      socket.emit("identify", username);
+    if (username && room) {
+      socket.emit("join room", { room, username });
+
+      socket.on(
+        "message:client",
+        ({ sender, message }: { sender: string; message: string }) => {
+          setMessages((prevMessages) => [...prevMessages, { sender, message }]);
+        }
+      );
+
+      return () => {
+        socket.off("chat message");
+      };
     }
-
-    socket.on(
-      "chat message",
-      ({ sender, message }: { sender: string; message: string }) => {
-        setMessages((prevMessages) => [...prevMessages, { sender, message }]);
-      }
-    );
-
-    return () => {
-      socket.off("chat message");
-    };
-  }, [username]);
+  }, [username, room]);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (message && receiver && username) {
-      socket.emit("chat message", { sender: username, receiver, message });
+    if (message && room && username) {
+      socket.emit("message:server", { room, sender: username, message });
       setMessage("");
     }
   };
@@ -49,9 +48,9 @@ export default function Chat() {
         />
         <input
           type="text"
-          placeholder="Recipient"
-          value={receiver}
-          onChange={(e) => setReceiver(e.target.value)}
+          placeholder="Room"
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
         />
       </div>
       <ul id="messages">

@@ -15,43 +15,20 @@ app.get("/", (req, res) => {
   res.send({ message: "Hello from the server!" });
 });
 
-const userSockets: Map<string, string> = new Map();
-
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("identify", (username: string) => {
-    userSockets.set(username, socket.id);
-    console.log(`User identified: ${username}`);
+  socket.on("join room", ({ room, username }) => {
+    socket.join(room);
+    console.log(`${username} joined room ${room}`);
   });
 
-  socket.on(
-    "chat message",
-    ({
-      sender,
-      receiver,
-      message,
-    }: {
-      sender: string;
-      receiver: string;
-      message: string;
-    }) => {
-      const receiverSocketId = userSockets.get(receiver);
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("chat message", { sender, message });
-      } else {
-        console.log(`Receiver ${receiver} not connected`);
-      }
-    }
-  );
+  socket.on("message:server", ({ room, sender, message }) => {
+    io.to(room).emit("message:client", { sender, message });
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
-    userSockets.forEach((socketId, username) => {
-      if (socketId === socket.id) {
-        userSockets.delete(username);
-      }
-    });
   });
 });
 
