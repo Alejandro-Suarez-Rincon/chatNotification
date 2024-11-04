@@ -5,15 +5,17 @@ services:
       context: ./packages/web
     volumes:
       - ./packages/web:/app
+      - /app/node_modules  # Evita sobrescribir node_modules
     ports:
       - "3000:3000"
-    command: npm run dev 
+    command: npm run dev
 
   core:
     build:
       context: ./packages/core
     volumes:
       - ./packages/core:/app
+      - /app/node_modules  # Evita sobrescribir node_modules
     ports:
       - "4000:4000"
     command: npm run dev

@@ -2,18 +2,15 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Copia solo package.json y package-lock.json primero
 COPY package*.json ./
 
+# Instala las dependencias
 RUN npm install
 
-# Asegúrate de que el script dev esté definido en package.json
-# Si utilizas una versión de Node.js que necesita bibliotecas adicionales, agrégalas aquí
-
+# Copia el resto de los archivos de la aplicación
 COPY . .
-
-# Aquí puede que no necesites construir el proyecto si solo ejecutas Express en desarrollo
-# RUN npm run build 
 
 EXPOSE 4000
 
-CMD ["npm", "run", "dev"]  # Ajusta según el comando necesario para tu aplicación Express
+CMD ["npm", "run", "dev"]
