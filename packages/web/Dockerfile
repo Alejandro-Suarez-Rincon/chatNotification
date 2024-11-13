@@ -2,12 +2,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json /app
 
-RUN npm install
+RUN npm install && echo "npm install completed"
 
-COPY . .
+COPY . /app/
 
 EXPOSE 3000
-
 CMD ["npm", "run", "dev"]

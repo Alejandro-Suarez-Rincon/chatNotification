@@ -1,11 +1,13 @@
 version: '3.8'
+
 services:
   web:
     build:
       context: ./packages/web
+      dockerfile: Dockerfile
     volumes:
       - ./packages/web:/app
-      #- /app/node_modules
+      - /app/node_modules
     ports:
       - "3000:3000"
     command: npm run dev
@@ -13,6 +15,7 @@ services:
   core:
     build:
       context: ./packages/core
+      dockerfile: Dockerfile
     volumes:
       - ./packages/core:/app
       - /app/node_modules
