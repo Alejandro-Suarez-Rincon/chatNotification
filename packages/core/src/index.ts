@@ -1,12 +1,17 @@
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
+import dotenv from "dotenv";
+
+// Cargar variables de entorno
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.SOCKET_ORIGIN || "*", // Configuración de origen desde .env
     methods: ["GET", "POST"],
   },
 });
@@ -16,7 +21,7 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("A user connected");
 
   socket.on("join room", ({ room, username }) => {
     socket.join(room);
@@ -28,10 +33,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("User disconnected");
   });
 });
 
+// Configurar el puerto y dirección de escucha
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
 server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server listening on http://0.0.0.0:${PORT}`);

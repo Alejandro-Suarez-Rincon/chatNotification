@@ -1,12 +1,12 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "outDir": "./dist"
-    },
-    "include": ["./src"]
-  }
-  
+  "compilerOptions": {
+    "target": "ES6",                    // ES6 es suficiente para la mayoría de las aplicaciones.
+    "module": "commonjs",               // CommonJS es el formato más común en Node.js.
+    "strict": true,                     // Mantener las reglas estrictas de TypeScript.
+    "esModuleInterop": true,            // Asegura que puedas importar módulos de CommonJS con `import` de ES6.
+    "skipLibCheck": true,               // Mejora la velocidad de compilación al omitir la comprobación de tipos de las librerías.
+    "outDir": "./dist"                  // Directorio de salida para los archivos compilados.
+  },
+  "include": ["./src"],                  // Asegura que solo se compilen los archivos dentro de `src`.
+  "exclude": ["node_modules", "dist"]    // Evita que `node_modules` y `dist` se incluyan en la compilación.
+}
