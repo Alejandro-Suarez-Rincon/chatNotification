@@ -2,18 +2,12 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json /app/
 
-RUN npm install
+RUN npm install && echo "npm install completed"
 
-# Asegúrate de que el script dev esté definido en package.json
-# Si utilizas una versión de Node.js que necesita bibliotecas adicionales, agrégalas aquí
-
-COPY . .
-
-# Aquí puede que no necesites construir el proyecto si solo ejecutas Express en desarrollo
-# RUN npm run build 
+COPY . /app/
 
 EXPOSE 4000
 
-CMD ["npm", "run", "dev"]  # Ajusta según el comando necesario para tu aplicación Express
+CMD ["npm", "run", "dev"]

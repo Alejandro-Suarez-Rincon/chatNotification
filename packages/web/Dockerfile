@@ -1,8 +1,13 @@
-FROM node:20
+FROM node:20-alpine
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+
+COPY package*.json /app
+
+RUN npm install && echo "npm install completed"
+
+COPY . /app/
+
 EXPOSE 3000
+
 CMD ["npm", "run", "dev"]
