@@ -27,7 +27,12 @@ io.on("connection", (socket) => {
         console.log(`${username} joined room ${room}`);
     });
     socket.on("message:server", ({ room, sender, message }) => {
-        io.to(room).emit("message:client", { sender, message });
+        io.to(room).emit("message:client", {
+            room,
+            sender,
+            message,
+            timestamp: new Date().toISOString(),
+        });
     });
     socket.on("disconnect", () => {
         console.log("User disconnected");

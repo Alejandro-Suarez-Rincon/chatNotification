@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  web:
-    build:
-      context: ./packages/web
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    volumes:
-      - ./packages/web:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    command: npm run dev
-
   core:
     build:
       context: ./packages/core
@@ -25,4 +12,21 @@ services:
       - /app/node_modules
     ports:
       - "4000:4000"
-    command: npm start
+    restart: unless-stopped
+    command: npm run dev
+
+  web:
+    build:
+      context: ./packages/web
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./packages/web:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - core
+    command: npm run dev
